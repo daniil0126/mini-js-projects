@@ -1,0 +1,108 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    background-color: rgb(119, 0, 170);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    font-family:'Inter', sans-serif;
+}
+
+.section1 h1 {
+    margin: auto;
+    text-align: center;
+    color: white;
+    margin: 15px;
+}
+
+.section2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 50px;
+    margin: 50px;
+}
+
+.btn {
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: rgb(100, 1, 100);
+    border: 5px solid purple;
+    padding: 10px;
+}
+.btn:hover {
+    background-color: rgb(140, 0, 140);
+}
+
+img {
+    width: 200px;
+}
+
+.section3, .section4 {
+    display: flex;
+    flex-direction: column;
+    color: white;
+    text-align: center;
+    align-items: center;
+
+}
+
+.section4 .resetBtn {
+    width: 150px;
+    padding: 25px;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.5);
+    color: black;
+    border-radius: 50px;
+    font-family: 'Inter', sans-serif;
+    font-size: medium;
+    border: 1px solid black;
+}
+.resetBtn:hover {
+    background-color: white;
+}
+
+.table_component {
+    overflow: auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+}
+.table_component table {
+    border: 1px solid #dededf;
+    height: 100%;
+    width: 50%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: 1px;
+    text-align: left;
+}
+.table_component th {
+    border: 1px solid #dededf;
+    background-color: #eceff1;
+    color: black;
+    padding: 5px;
+}
+.table_component td {
+    border: 1px solid #dededf;
+    background-color: white;
+    color: black;
+    padding: 5px;
+}
+
+.result {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    width: 100%;
+    font-size: 60px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15%;
+    padding: 30px;
+    text-align: center;
+    position: absolute;
+}
