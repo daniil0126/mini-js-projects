@@ -51,6 +51,22 @@ h1.mainTitle {
     cursor: not-allowed;
 }
 
+#spinBtn {
+    padding: 20px;
+    width: 150px;
+    font-size: large;
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    border: none;
+    background-color: rgb(200, 41, 108);
+    color: white;
+    cursor: pointer;
+}
+
+#spinBtn:hover {
+    background-color: rgb(155, 31, 83);
+}
+
 .gameSection {
     background-color: rgba(118, 0, 43, 0.854);
     width: 70%;
@@ -74,21 +90,6 @@ img {
     background-color: rgb(255, 255, 255);
 }
 
-#spinBtn {
-    padding: 20px;
-    width: 150px;
-    font-size: large;
-    font-family: "Inter", sans-serif;
-    font-weight: 600;
-    border: none;
-    background-color: rgb(200, 41, 108);
-    color: white;
-    cursor: pointer;
-}
-
-#spinBtn:hover {
-    background-color: rgb(155, 31, 83);
-}
 
 #coinImg {
     background-color: rgba(130, 0, 46, 0.854);

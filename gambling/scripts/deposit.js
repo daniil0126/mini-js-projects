@@ -1,47 +1,89 @@
-const balanceCount = document.getElementById('balanceNum')
-const depositInput = document.getElementById('deposit')
-const depositBtn = document.getElementById('depoBtn')
-const errorMessage = document.getElementById('errorMsg')
-const limitMessage = document.getElementById('limitMsg')
+//DOM
+const balanceCount = document.getElementById('balanceNum') //balance view
+const depositInput = document.getElementById('deposit') //input for deposit top up
+const depositBtn = document.getElementById('depoBtn') //button for top up
+const depositError = document.getElementById('errorMsg') // error message for deposit actions
+const limitMessage = document.getElementById('limitMsg') // message for waiting to top up
+const first = document.getElementById('bananaIcon') // first slot
+const second = document.getElementById('cherryIcon') // second slot
+const third = document.getElementById('sevenIcon') // third slot
+const betInput = document.getElementById('bet') // input for bet 
+const betError = document.getElementById('betError') // error message for bet actions
+const successMessage = document.getElementById('betValue') //success message for bet actions
+const spinBtn = document.getElementById('spinBtn') // spin button
 
-const coolDownTime = 60
-const maxValue = 10000
-const minValue = 100
+// auxiliary constants
+const coolDownTime = 60 // cooldown time for deposit
+const maxValue = 10000 // maximum top up value
+const minValue = 100 // minimum top up value
+const minBetValue = 100 // minimum bet value
+const jackpotMultiplier = 5 // jackpot multiplier value
 
-let balance = 0
-let limit = coolDownTime
-let interval
+//array constants
+const symbols = ['banana.png', 'cherry.png', 'seven.png'] // slot src icons
+const slots = [first, second, third] // every slot array
 
-function deposit() {
+// changing variables
+let slotsValue = [] // after spinning result slots
+let balance = 0 // balance changing value
+
+// auxiliary functions
+function showErrorMessage(messageText, errorType){ // error message showing function
+    errorType.hidden = false
+    errorType.innerText = messageText
+}
+
+function showSuccessMessage(messageText, succesType){ // success message showing function
+    succesType.hidden = false
+    successMessage.innerText = messageText
+}
+
+function buttonStateUpdate(btnType, disableState){ // button state changing function
+    btnType.disabled = disableState
+    if(disableState === true){
+        btnType.style.backgroundColor = 'rgb(43, 43, 175)'
+        btnType.style.cursor = 'not-allowed'
+    }
+    else {
+        btnType.style.backgroundColor = 'rgb(54, 54, 215)'
+        btnType.style.cursor = 'pointer'
+    }
+}
+
+function updateBalanceData(balanceView, balance){ // balance view updating function
+    balanceView.innerText = balance
+}
+
+function startMessageState(messageType){ // message state at start
+    messageType.hidden = true
+}
+
+// main top up function
+function deposit() { 
     let amount = Number(depositInput.value)
-    errorMessage.hidden = true
-    limitMessage.hidden = true
+    startMessageState(depositError)
+    startMessageState(limitMessage)
     depositBtn.disabled = false
 
     if (isNaN(amount) || amount <= 0) {
-        errorMessage.innerText = "Введите число"
-        errorMessage.hidden = false
+        showErrorMessage("Введите число", depositError)
         return
     } else if (amount < minValue) {
-        errorMessage.innerText = `Минимальная сумма взноса ${minValue}`
-        errorMessage.hidden = false
+        showErrorMessage(`Минимальная сумма взноса ${minValue}`, depositError)
         return
     } else if (amount > maxValue) {
-        errorMessage.innerText = `Максимальная сумма взноса ${maxValue}`
-        errorMessage.hidden = false
+        showErrorMessage(`Максимальная сумма взноса ${maxValue}`, depositError)
         return
     }
 
     balance += amount
-    balanceCount.innerText = balance
+    updateBalanceData(balanceCount, balance)
     depositInput.value = ''
 
-    depositBtn.disabled = true
-    depositBtn.style.backgroundColor = 'rgb(43, 43, 175)'
-    depositBtn.style.cursor = 'not-allowed'
+    buttonStateUpdate(depositBtn, true)
 
-    limit = coolDownTime
-    interval = setInterval(() => {
+    let limit = coolDownTime
+    let interval = setInterval(() => {
         limitMessage.hidden = false
         limitMessage.innerText =
             `До следующего пополнения осталось: ${limit} секунд`
@@ -50,65 +92,42 @@ function deposit() {
         if (limit < 0) {
             clearInterval(interval)
             limitMessage.hidden = true
-            depositBtn.disabled = false
-            depositBtn.style.backgroundColor = 'rgb(54, 54, 215)'
-            depositBtn.style.cursor = 'pointer'
+            buttonStateUpdate(depositBtn, false)
         }
     }, 1000);
 }
 
-const first = document.getElementById('bananaIcon')
-const second = document.getElementById('cherryIcon')
-const third = document.getElementById('sevenIcon')
-
-const symbols = ['banana.png', 'cherry.png', 'seven.png']
-const slots = [first, second, third]
-
-const minBetValue = 100
-const betInput = document.getElementById('bet')
-
-const betError = document.getElementById('betError')
-const successMessage = document.getElementById('betValue')
-
-const spinBtn = document.getElementById('spinBtn')
-
-let slotsValue = []
-
+//main spin button function
 function spin() {
-    betError.hidden = true
     successMessage.style.color = 'rgb(0, 201, 0)'
     successMessage.hidden = true
+    betError.hidden = true
     let bet = Number(betInput.value)
 
     if (isNaN(bet) || bet <= 0) {
-        betError.hidden = false
-        betError.innerText = "Введите ставку"
+        showErrorMessage("Введите ставку", betError)
         return
     }
 
     if (bet < minBetValue) {
-        betError.hidden = false
-        betError.innerText = `Ставка не может быть меньше ${minBetValue}`
+        showErrorMessage(`Ставка не может быть меньше ${minBetValue}`, betError)
         return
     }
 
     if (balance < bet) {
-        betError.hidden = false
-        betError.innerText = `На балансе недостаточно средств`
+        showErrorMessage("На балансе недостаточно средств", betError)
         return
     }
 
     balance -= bet
-    balanceCount.innerText = balance
+    updateBalanceData(balanceCount, balance)
+    showSuccessMessage( `Ваша ставка: ${bet}`, successMessage)
 
-    successMessage.hidden = false
-    successMessage.innerText = `Ваша ставка: ${bet}`
     betInput.value = ''
 
     slotsValue = [] 
     for (let i = 0; i < slots.length; i++) {
-        spinBtn.style.cursor = 'not-allowed'
-        spinBtn.disabled = true
+        buttonStateUpdate(spinBtn, true)
         let interval = setInterval(() => {
             const randomItem = symbols[Math.floor(Math.random() * symbols.length)]
             slots[i].src = `./src/${randomItem}`
@@ -118,29 +137,23 @@ function spin() {
 
             const fileName = slots[i].src.split('/').pop()
             slotsValue.push(fileName)
-            console.log(`добавлено в массив: ${fileName}`)
 
             if (i === 2) {
-                spinBtn.style.cursor = 'pointer'
-                spinBtn.disabled = false
-                console.log("Остановлено"); 
+                buttonStateUpdate(spinBtn, false)
                 isSpining = false
                 const isEqual = slotsValue.every(slot => slot === slotsValue[0])
                 if(isEqual){
-                    console.log("Джекпот");
-                    bet *= 5
+                    bet *= jackpotMultiplier
                     balance += bet
-                    balanceCount.innerText = balance
-                    successMessage.hidden = false
-                    successMessage.innerText = `Джекпот! Выигрыш составляет ${bet} денег. Баланс: ${balance}`
+                    updateBalanceData(balanceCount, balance)
+                    showSuccessMessage(`Джекпот! Выигрыш составляет ${bet} денег. Баланс: ${balance}`, successMessage)
                 }
                 else {
-                    console.log("Проигрыш");
-                    successMessage.hidden = false
-                    successMessage.style.color = 'red'
-                    successMessage.innerText = 'Проигрыш'
+                    successMessage.hidden = true
+                    showErrorMessage("Проигрыш", betError)
                 }
             }
         }, 3000 + i * 500);
     }
 }
+
