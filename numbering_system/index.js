@@ -26,10 +26,8 @@ btn.addEventListener('click', () => {
         else if (choice === 2) {
             let number = parseInt(prompt("Введи число в десятичной системе: "))
             let result = ""
-            console.log(number % 2)
             while (number) {
                 result += number % 2
-                console.log(result)
                 number /= 2
                 number = Math.floor(number)
             }
