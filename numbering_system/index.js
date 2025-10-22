@@ -17,7 +17,6 @@ btn.addEventListener('click', () => {
                     break
                 }
             }
-            if(number != 0)
             number = number.split("").reverse().join("")
             for (let i = 0; i < number.length; i++) {
                 result += ((2 ** i) * parseInt(number[i]))
